@@ -7,11 +7,14 @@
   <a routerLink="news/sports" routerLinkActive="active" class="item">Sports</a>
   <a routerLink="news/technology" routerLinkActive="active" class="item">Technology</a>
 
-  <p>🇷🇺</p>
-  <p>🇺🇸</p>
-  <p>🏴󠁧󠁢󠁥󠁮󠁧󠁿</p>
-  <p>🇩🇪</p>
-  <p>🇫🇷</p>
+  <span class="space"></span>
+  <div class="ui icon basic buttons">
+    <button (click)="changeLanguage('gr')" class="ui button" [disabled]="isDisabled('gr')"><i class="gr flag"></i></button>
+    <button (click)="changeLanguage('us')" class="ui button" [disabled]="isDisabled('us')"><i class="us flag"></i></button>
+    <button (click)="changeLanguage('ru')" class="ui button" [disabled]="isDisabled('ru')"><i class="ru flag"></i></button>
+    <button (click)="changeLanguage('de')" class="ui button" [disabled]="isDisabled('de')"><i class="de flag"></i></button>
+    <button (click)="changeLanguage('fr')" class="ui button" [disabled]="isDisabled('fr')"><i class="fr flag"></i></button>
+  </div>
 </div>
 
 <!-- business general health science sports technology -->

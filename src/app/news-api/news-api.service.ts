@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { map, timeout, delay } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
+import { Subject, BehaviorSubject } from 'rxjs';
 
 
 interface Article {
@@ -31,19 +32,23 @@ export class NewsApiService {
   private url = 'https://newsapi.org/v2/top-headlines';
   private pageSize = 10;
   private apiKey = '92a88fddeb2f485baec2fd18bdde2207';
-  private country = 'ru';
+  // private country = 'ru';
   // private page = 2;
+
+  pageUpdatedSubject$ = new Subject<number>();
+  numberOfPagesSubject$ = new Subject<number>();
+  languageSubject$ = new BehaviorSubject<string>('ru');
 
   constructor(
     private http: HttpClient,
     private route: ActivatedRoute
   ) { }
 
-  fetchArticles(category, page) {
+  fetchArticles({ category, page, language }) {
     const options = {
       params: new HttpParams()
       .set('apiKey', this.apiKey)
-      .set('country', this.country)
+      .set('country', language)
       .set('pageSize', String(this.pageSize))
       .set('category', String(category))
       .set('page', String(page))

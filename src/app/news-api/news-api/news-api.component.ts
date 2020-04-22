@@ -15,9 +15,8 @@ export class NewsApiComponent implements OnInit {
   page = 1;
   numberOfPages;
   private pageSize = 10;
+  language: string;
 
-  private pageUpdatedSubject$ = new Subject<number>();
-  private numberOfPagesSubject$ = new Subject<number>();
 
   constructor(
     private newsApiService: NewsApiService,
@@ -26,35 +25,39 @@ export class NewsApiComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.route.paramMap.pipe(
-      tap(() => {
-        this.isLoading = true;
-      }),
-      switchMap(params => {
-        const category = params.get('category');
-        return this.newsApiService.fetchArticles(category, 1);
-      })
-    ).subscribe(response => {
-      this.articles = response.articles;
-      const totalPages = Math.ceil(response.totalResults / this.pageSize);
-      this.numberOfPagesSubject$.next(totalPages);
-      this.isLoading = false;
+    this.newsApiService.languageSubject$.subscribe(language => {
+      this.language = language;
+      this.route.paramMap.pipe(
+        tap(() => {
+          this.isLoading = true;
+        }),
+        switchMap(params => {
+          this.page = 1;
+          const category = params.get('category');
+          return this.newsApiService.fetchArticles({ category, page: 1, language });
+        })
+      ).subscribe(response => {
+        this.articles = response.articles;
+        const totalPages = Math.ceil(response.totalResults / this.pageSize);
+        this.newsApiService.numberOfPagesSubject$.next(totalPages);
+        this.isLoading = false;
+      });
     });
 
     // get acount all pages
-    this.numberOfPagesSubject$.subscribe(numberOfPages => {
+    this.newsApiService.numberOfPagesSubject$.subscribe(numberOfPages => {
       this.numberOfPages = numberOfPages;
     });
 
     // get current page
-    this.pageUpdatedSubject$.pipe(
+    this.newsApiService.pageUpdatedSubject$.pipe(
       tap(() => {
         this.isLoading = true;
       })
     ).subscribe((page) => {
       const category = this.route.snapshot.params.category;
       this.page = page;
-      this.newsApiService.fetchArticles(category, page).subscribe(response => {
+      this.newsApiService.fetchArticles({ category, page, language: this.language }).subscribe(response => {
         this.articles = response.articles;
         this.isLoading = false;
       });
@@ -63,14 +66,13 @@ export class NewsApiComponent implements OnInit {
 
   next() {
     this.page++;
-    this.pageUpdatedSubject$.next(this.page);
+    this.newsApiService.pageUpdatedSubject$.next(this.page);
   }
 
   prev() {
     this.page--;
-    this.pageUpdatedSubject$.next(this.page);
+    this.newsApiService.pageUpdatedSubject$.next(this.page);
   }
 
 }
-
 
