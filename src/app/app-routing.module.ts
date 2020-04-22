@@ -7,7 +7,6 @@ import { HeaderComponent } from './shared/components/header/header.component';
 const routes: Routes = [
   { path: '', component: HeaderComponent},
   { path: 'news/:category', component: NewsApiComponent},
-  // { path: 'entertainment', component: NewsApiComponent},
   // { path: 'general', component: NewsApiComponent},
   // { path: 'health', component: NewsApiComponent},
   // { path: 'science', component: NewsApiComponent},
@@ -21,4 +20,4 @@ const routes: Routes = [
 })
 export class AppRoutingModule { }
 
-// business entertainment general health science sports technology
+// business general health science sports technology

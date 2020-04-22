@@ -1,15 +1,40 @@
-<div class="ui very relaxed items">
-  <ng-container *ngFor="let article of articles">
-    <div class="item">
-      <div class="image">
-        <img [src]="article.urlToImage">
-      </div>
-      <div class="content">
-        <a class="ui header" [href]="article.url">{{ article.title }}</a>
-        <div class="description">
-          <p>{{ article.description }}</p>
+<ng-container *ngIf="!isLoading; else loafingRef">
+  <div class="ui very relaxed items">
+    <ng-container *ngFor="let article of articles">
+      <div class="item">
+        <div class="image">
+          <img [src]="article.urlToImage">
+        </div>
+        <div class="content">
+          <a class="ui header" [href]="article.url">{{ article.title }}</a>
+          <div class="description">
+            <p>{{ article.description }}</p>
+          </div>
         </div>
       </div>
+    </ng-container>
+  </div>
+  
+  
+  <div class="ui pagination menu" *ngIf="numberOfPages">
+    <div class="ui buttons">
+      <button (click)="prev()" class="ui button" [disabled]="page === 1">prev</button>
+      <button class="ui button disabled">{{page}} of {{numberOfPages}}</button>
+      <button (click)="next()" class="ui button" [disabled]="page === numberOfPages">next</button>
     </div>
-  </ng-container>
-</div>
+  </div>
+
+</ng-container>
+
+<ng-template #loafingRef>
+  <div class="loading-container">
+    <app-spinner></app-spinner>
+  </div>
+</ng-template>
+
+<!-- <app-pagination></app-pagination> -->
+
+<!-- <div class="loading-container">
+  <app-spinner></app-spinner>
+
+</div> -->
