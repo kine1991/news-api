@@ -1,0 +1,15 @@
+<div class="ui very relaxed items">
+  <ng-container *ngFor="let article of articles">
+    <div class="item">
+      <div class="image">
+        <img [src]="article.urlToImage">
+      </div>
+      <div class="content">
+        <a class="ui header" [href]="article.url">{{ article.title }}</a>
+        <div class="description">
+          <p>{{ article.description }}</p>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>
